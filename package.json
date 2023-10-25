@@ -8,7 +8,7 @@
     "start": "node index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "A.shakour",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2"
