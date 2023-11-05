@@ -17,6 +17,7 @@ model Admin{
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Event Event[]
 }
 model User{
   id   Int @id @default(autoincrement())
@@ -26,4 +27,17 @@ model User{
   createdAt DateTime @default(now())
   UpdatedAt DateTime @default(now())
 
+}
+
+model Event {
+  id Int @id @default(autoincrement())
+  adminId Int
+  title String
+  description String
+  location String
+  price Int
+  date DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  Admin Admin @relation(fields: [adminId],references: [id])
 }

@@ -96,7 +96,9 @@ export const loginAdmin = asyncHandler(async (req, res) => {
   }
 });
 
-// })
+
+
+
 
 const generateToken = id => {
 
