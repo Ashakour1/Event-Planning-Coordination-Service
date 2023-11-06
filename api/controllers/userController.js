@@ -96,11 +96,12 @@ export const loginUser = asyncHandler(async (req, res) => {
 });
 
 export const getUserData = asyncHandler(async (req, res) => {
+  res.status(200);
   res.json({
-    message : "user data display"
-  })
+    message: "user data display",
+  });
 });
 
 const generateToken = (id) => {
-  return jwt.sign({ id },process.env.JWT_SECRET, { expiresIn: "30d" });
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };

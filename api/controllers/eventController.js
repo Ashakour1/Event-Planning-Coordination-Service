@@ -15,28 +15,91 @@ export const getEvents = asyncHandler(async (req, res) => {
 });
 
 export const setEvent = asyncHandler(async (req, res) => {
-  const { adminId, title, description, location, price ,date} = req.body;
+  try {
+    const { adminId, title, description, location, price, date } = req.body;
 
-  
-  const event = await prisma.event.create({
-    data: {
-      adminId,
-      title,
-      description,
-      location,
-      price,
-      date : new Date(date)
-    },
-  });
+    if (!adminId || !title || !description || !location || !price || !date) {
+      res.status(400);
+      throw new Error("Please fill all the fields");
+    }
 
-  if (!event) {
-    res.status(400);
-    throw new Error("please create event");
-  }else{
-    res.status(200)
+    const event = await prisma.event.create({
+      data: {
+        adminId,
+        title,
+        description,
+        location,
+        price,
+        date,
+      },
+    });
+
+    if (!event) {
+      res.status(400);
+      throw new Error("event not created");
+    }
+
+    res.status(201);
     res.json({
-        message: "Event created successfully",
-      });
+      event,
+    });
+  } catch (error) {
+    res.status(400);
+    throw new Error("event not created");
   }
-  
+});
+
+export const updateEvent = asyncHandler(async (req, res) => {
+  const { id } = req.params.id;
+  const { adminId, title, description, location, price, date } = req.body;
+  try {
+    const event = await prisma.event.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        adminId,
+        title,
+        description,
+        location,
+        price,
+        date,
+      },
+    });
+
+    if (!event) {
+      res.status(400);
+      throw new Error("event not updated");
+    }
+    res.status(201);
+    res.json({
+      message: "event updated successfully",
+    });
+  } catch (error) {
+    res.status(400);
+    throw new Error("event not found");
+  }
+});
+
+export const deleteEvent = asyncHandler(async (req, res) => {
+
+  try {
+    const { id } = req.params;
+    const event = await prisma.event.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (!event) {
+      res.status(400);
+      throw new Error("event not found");
+    }
+    res.status(200);
+    res.json({
+      event,
+    });
+  } catch (error) {
+    res.status(400);
+    throw new Error("Event not found");
+  }
 });

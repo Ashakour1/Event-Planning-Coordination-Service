@@ -96,7 +96,27 @@ export const loginAdmin = asyncHandler(async (req, res) => {
   }
 });
 
+export const getAdminData =  asyncHandler(async (req,res) => {
 
+  try{
+
+    const adminData = await prisma.admin.findMany();
+
+  if(adminData.length === 0){
+    res.status(404);
+    throw new Error("No admins found");
+  }
+
+  res.status(200);
+  res.json({
+    adminData
+  })
+  
+  }catch(error){
+    res.status(400);
+    throw new Error("errors not found")
+  }
+})
 
 
 
