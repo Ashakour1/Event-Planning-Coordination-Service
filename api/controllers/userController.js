@@ -13,8 +13,10 @@ import prisma from "../config/prisma.js";
  */
 
 export const registerUser = asyncHandler(async (req, res) => {
+  // get data from body
   const { name, email, password } = req.body;
 
+  // check if all fields are filled
   if (!name || !email || !password) {
     res.status(400);
     throw new Error("Please fill all the fields");
@@ -34,7 +36,6 @@ export const registerUser = asyncHandler(async (req, res) => {
   }
 
   // hash password
-
   const hashPassword = await bcrypt.hash(password, 10);
 
   // create user
@@ -46,18 +47,19 @@ export const registerUser = asyncHandler(async (req, res) => {
     },
   });
 
-  if (user) {
-    res.status(200);
-    res.json({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      token: generateToken(user.id),
-    });
-  } else {
-    res.status(404);
-    throw new Error("User Not found");
-  }
+  // return user response
+  res.status(200).json({
+    success: true,
+    error: null,
+    results: {
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        token: generateToken(user.id),
+      },
+    },
+  });
 });
 
 /**
@@ -70,35 +72,49 @@ export const registerUser = asyncHandler(async (req, res) => {
  */
 
 export const loginUser = asyncHandler(async (req, res) => {
+  // get data from body
   const { email, password } = req.body;
 
+  // check if all fields are filled
   if (!email || !password) {
     res.status(400);
     throw new Error("Please fill in the fields");
   }
 
+  // check if user exists
   const user = await prisma.user.findUnique({
     where: {
       email,
     },
   });
 
-  if (user && (await bcrypt.compare(password, user.password))) {
-    res.status(200);
-    res.json({
-      message: "Already Login successfully",
-      token: generateToken(user.id),
-    });
-  } else {
-    res.status(401);
-    throw new Error("User Not found");
+  // if user not exists
+  if (!user) {
+    res.status(400);
+    throw new Error("user not exists");
   }
-});
 
-export const getUserData = asyncHandler(async (req, res) => {
-  res.status(200);
-  res.json({
-    message: "user data display",
+  // check password
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+  // if password not correct
+  if (!isPasswordCorrect) {
+    res.status(400);
+    throw new Error("Invalid Credentials");
+  }
+
+  // return user response
+  res.status(200).json({
+    success: true,
+    error: null,
+    results: {
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        token: generateToken(user.id),
+      },
+    },
   });
 });
 
