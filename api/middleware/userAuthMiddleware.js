@@ -21,6 +21,7 @@ const protect = asyncHandler(async (req, res, next) => {
       req.user = await prisma.user.findUnique({
         where: {
           id: decoded.id,
+          email: decoded.email,
         },
       });
 

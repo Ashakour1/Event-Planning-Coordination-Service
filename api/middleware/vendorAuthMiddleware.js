@@ -20,6 +20,7 @@ const vendorProtect = asyncHandler(async (req, res, next) => {
       req.vendor = await prisma.vendor.findUnique({
         where: {
           id: decoded.id,
+          email : decoded.email
         },
       });
       //

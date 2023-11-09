@@ -7,7 +7,7 @@ import vendorProtect from "../middleware/vendorAuthMiddleware.js";
 const router = express.Router();
 
 
-router.post("/",adminProtect,setEvent).get("/",vendorProtect,adminProtect,protect,getEvents);
+router.post("/",adminProtect,setEvent).get("/",adminProtect,vendorProtect,protect,getEvents);
 router.put("/:id",adminProtect,updateEvent).delete("/:id",adminProtect,deleteEvent);
 
 
