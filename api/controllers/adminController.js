@@ -55,7 +55,7 @@ export const registerAdmin = asyncHandler(async (req, res) => {
         id: admin.id,
         name: admin.name,
         email: admin.email,
-        token: generateToken(adminExist.id,adminExist.email),
+        token: generateToken(admin.id,admin.email),
       },
     },
   });

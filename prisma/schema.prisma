@@ -27,7 +27,7 @@ model User{
   password String
   createdAt DateTime @default(now())
   UpdatedAt DateTime @default(now())
- 
+  Invitation Invitation[]
 }
 
 model Event {
@@ -41,6 +41,8 @@ model Event {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   Admin Admin @relation(fields: [adminId],references: [id])
+  Invitation Invitation[]
+  vendorApplications VendorApplications[]
   
 }
 
@@ -51,4 +53,27 @@ model Vendor{
   password String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  vendorApplications VendorApplications[]
+}
+
+model Invitation{
+  id Int @id @default(autoincrement())
+  eventId Int
+  userId Int
+  status String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  Event Event @relation(fields: [eventId],references: [id])
+  User User @relation(fields: [userId],references: [id])
+}
+
+model VendorApplications{
+  id Int @id @default(autoincrement())
+  vendorId Int
+  eventId Int
+  status String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  Event Event @relation(fields: [eventId],references: [id])
+  Vendor Vendor @relation(fields: [vendorId],references: [id])
 }

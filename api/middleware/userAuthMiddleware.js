@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 import prisma from "../config/prisma.js";
 
-const protect = asyncHandler(async (req, res, next) => {
+const userProtect = asyncHandler(async (req, res, next) => {
   let token;
 
   // if token
@@ -37,4 +37,4 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
-export default protect;
+export default userProtect;
