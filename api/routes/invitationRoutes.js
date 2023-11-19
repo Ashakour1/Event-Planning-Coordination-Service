@@ -7,7 +7,7 @@ import userProtect from "../middleware/userAuthMiddleware.js";
 
 const router = express.Router();
 
-router.get("/all",adminProtect, getAllInvitations).post("/",userProtect, setInvitation);
+router.get("/",adminProtect,userProtect, getAllInvitations).post("/",userProtect, setInvitation);
 router.get("/:id",userProtect,getInvitationByEventId).put("/:id",adminProtect, updateInvitation);
 
 

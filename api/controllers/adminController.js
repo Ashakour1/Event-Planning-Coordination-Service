@@ -55,7 +55,7 @@ export const registerAdmin = asyncHandler(async (req, res) => {
         id: admin.id,
         name: admin.name,
         email: admin.email,
-        token: generateToken(admin.id,admin.email),
+        token: generateToken(admin.email),
       },
     },
   });
@@ -111,12 +111,12 @@ export const loginAdmin = asyncHandler(async (req, res) => {
         id: adminExist.id,
         name: adminExist.name,
         email: adminExist.email,
-        token: generateToken(adminExist.id,adminExist.email),
+        token: generateToken(adminExist.email),
       },
     },
   });
 });
 
-const generateToken = (id,email) => {
-  return jwt.sign({ id,email }, process.env.JWT_SECRET, { expiresIn: "30d" });
+const generateToken = ( email) => {
+  return jwt.sign({  email }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };

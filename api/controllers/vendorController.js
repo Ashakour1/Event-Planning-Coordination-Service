@@ -56,7 +56,7 @@ export const signupVendor = asyncHandler(async (req, res) => {
         id: vendor.id,
         name: vendor.name,
         email: vendor.email,
-        token: generateToken(vendor.id,vendor.email),
+        token: generateToken(vendor.id),
       },
     },
   });
@@ -115,7 +115,7 @@ export const loginVendor = asyncHandler(async (req, res) => {
         id: venderExist.id,
         name: venderExist.name,
         email: venderExist.email,
-        token: generateToken(venderExist.id,venderExist.email),
+        token: generateToken(venderExist.email),
       },
     },
   });
@@ -123,6 +123,6 @@ export const loginVendor = asyncHandler(async (req, res) => {
 
 // generate Token
 
-const generateToken = (id,email) => {
-  return jwt.sign({ id,email }, process.env.JWT_SECRET, { expiresIn: "30d" });
+const generateToken = (email) => {
+  return jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };

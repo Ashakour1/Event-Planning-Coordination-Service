@@ -21,7 +21,6 @@ const adminProtect = asyncHandler(async (req, res, next) => {
       // get user from token
      const admin =  await prisma.admin.findUnique({
         where: {
-          id: decoded.id,
           email : decoded.email
         },
       })

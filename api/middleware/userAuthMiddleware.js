@@ -16,11 +16,11 @@ const userProtect = asyncHandler(async (req, res, next) => {
 
       // verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log(decoded)
 
       // get user from token
       req.user = await prisma.user.findUnique({
         where: {
-          id: decoded.id,
           email: decoded.email,
         },
       });
