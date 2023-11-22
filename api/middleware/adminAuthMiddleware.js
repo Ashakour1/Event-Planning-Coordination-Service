@@ -12,25 +12,27 @@ const adminProtect = asyncHandler(async (req, res, next) => {
     try {
       // get token
       token = req.headers.authorization.split(" ")[1];
-      
+
       //  verify token
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log(decoded);
+
+      // console.log(decoded);
 
       // get user from token
-     const admin =  await prisma.admin.findUnique({
+      const admin = await prisma.admin.findUnique({
         where: {
-          email : decoded.email
+          email: decoded.email,
         },
-      })
-      
-      // set user to req.user
+      });
+
       req.admin = admin;
 
-
-
-     
+      if (!admin) {
+        res.status(401);
+        throw new Error("Not authorized, admin access required");
+      }
+      // set user to req.user
 
       // next
       next();

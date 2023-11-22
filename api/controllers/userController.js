@@ -48,16 +48,16 @@ export const registerUser = asyncHandler(async (req, res) => {
   });
 
   // return user response
-  res.status(200).json({
+  res.status(201).json({
+    status : 201,
     success: true,
     error: null,
     results: {
-      data: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        token: generateToken(user.email),
-      },
+      data : {
+        Message: "User Created Successfully",
+        token: generateToken(user.name, user.email),
+      }
+      
     },
   });
 });
@@ -99,25 +99,26 @@ export const loginUser = asyncHandler(async (req, res) => {
 
   // if password not correct
   if (!isPasswordCorrect) {
-    res.status(400);
+    res.status(401);
     throw new Error("Invalid Credentials");
   }
 
   // return user response
-  res.status(200).json({
+  res.status(201).json({
+    status : 201,
     success: true,
     error: null,
     results: {
       data: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        token: generateToken(user.email),
+        message : "User Logged In Successfully",
+        token: generateToken(user.name, user.email),
       },
     },
   });
 });
 
-const generateToken = (email) => {
-  return jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "30d" });
+const generateToken = (name, email) => {
+  return jwt.sign({ name, email }, process.env.JWT_SECRET, {
+    expiresIn: "30m",
+  });
 };

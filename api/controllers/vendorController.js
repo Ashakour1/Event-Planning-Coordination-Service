@@ -48,15 +48,14 @@ export const signupVendor = asyncHandler(async (req, res) => {
   });
 
   // return vendor data
-  res.status(200).json({
+  res.status(201).json({
+    status : 201,
     success: true,
     error: null,
     results: {
       data: {
-        id: vendor.id,
-        name: vendor.name,
-        email: vendor.email,
-        token: generateToken(vendor.id),
+        message : "vendor Created Successfully",
+        token: generateToken(vendor.name,vendor.email),
       },
     },
   });
@@ -90,7 +89,7 @@ export const loginVendor = asyncHandler(async (req, res) => {
 
   // if vender not exist
   if (!venderExist) {
-    res.status(400);
+    res.status(404);
     throw new Error("vendor not found");
   }
 
@@ -107,15 +106,14 @@ export const loginVendor = asyncHandler(async (req, res) => {
   }
 
   // return vendor response
-  res.status(200).json({
+  res.status(201).json({
+    status : 201,
     success: true,
     error: null,
     results: {
       data: {
-        id: venderExist.id,
-        name: venderExist.name,
-        email: venderExist.email,
-        token: generateToken(venderExist.email),
+        message : "vendor Logged in Successfully",
+        token: generateToken(venderExist.name,venderExist.email),
       },
     },
   });
@@ -123,6 +121,6 @@ export const loginVendor = asyncHandler(async (req, res) => {
 
 // generate Token
 
-const generateToken = (email) => {
-  return jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "30d" });
+const generateToken = (name,email) => {
+  return jwt.sign({ name,email }, process.env.JWT_SECRET, { expiresIn: "30m" });
 };

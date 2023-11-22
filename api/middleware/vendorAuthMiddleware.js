@@ -17,12 +17,19 @@ const vendorProtect = asyncHandler(async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       // get vendor from token
-      req.vendor = await prisma.vendor.findUnique({
+      const vendor = await prisma.vendor.findUnique({
         where: {
-          id: decoded.id,
-          email : decoded.email
+          name: decoded.name,
+          email: decoded.email,
         },
       });
+
+      req.vendor = vendor;
+
+      if (!vendor) {
+        res.status(401);
+        throw new Error("Not authorized, vendor access required");
+      }
       //
       next();
     } catch (error) {

@@ -42,7 +42,7 @@ export const setVendorApplication = asyncHandler(async (req, res) => {
   // check if all fields are filled
   if (!eventId || !vendorId) {
     res.status(400);
-    throw new Error("Please fill all the fields");
+    throw new Error("Please fill in all required fields");
   }
 
   // check if eventExist exists
@@ -77,10 +77,10 @@ export const setVendorApplication = asyncHandler(async (req, res) => {
     },
   });
 
-// if vendor has already sent an invitation for this event
+  // if vendor has already sent an applications for this event
   if (existVendorApplications) {
     res.status(400);
-    throw new Error("Vendor has already sent an invitation for this event");
+    throw new Error("Duplicate applications. Please wait for the response.");
   }
 
   // create vendorApplication
@@ -88,7 +88,7 @@ export const setVendorApplication = asyncHandler(async (req, res) => {
     data: {
       eventId: Number(eventId),
       vendorId: Number(vendorId),
-      status: "pending",
+      status: "Pending",
     },
   });
 
@@ -97,7 +97,9 @@ export const setVendorApplication = asyncHandler(async (req, res) => {
     success: true,
     error: null,
     results: {
-      data: vendorApplication,
+      data: {
+        message : "Application sent successfully"
+      }
     },
   });
 });
@@ -123,10 +125,10 @@ export const updateVendorApplication = asyncHandler(async (req, res) => {
   // check if eventExist exists
   const eventExist = await prisma.event.findUnique({
     where: {
-      id: Number(eventId),
+      id: Number(id),
     },
   });
-//   if event not exist
+  //   if event not exist
   if (!eventExist) {
     res.status(400);
     throw new Error("Event not found");
@@ -137,7 +139,7 @@ export const updateVendorApplication = asyncHandler(async (req, res) => {
       id: Number(vendorId),
     },
   });
-//   if vendor not exist
+  //   if vendor not exist
   if (!vendorExist) {
     res.status(400);
     throw new Error("Vendor not exists");
@@ -145,12 +147,12 @@ export const updateVendorApplication = asyncHandler(async (req, res) => {
   // updateVendorApplication
   const vendorApplication = await prisma.vendorApplications.update({
     where: {
-      id: Number(req.params.id),
+      id: Number(id),
     },
     data: {
       eventId: Number(eventId),
       vendorId: Number(vendorId),
-      status: "accepted",
+      status: "Accepted",
     },
   });
 
@@ -188,7 +190,7 @@ export const getVendorApplicationById = asyncHandler(async (req, res) => {
     throw new Error("your Application not found");
   }
 
-//   check  vendor exist
+  //   check  vendor exist
   const venderExist = await prisma.vendor.findUnique({
     where: {
       id: Number(id),

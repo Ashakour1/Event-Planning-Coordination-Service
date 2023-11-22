@@ -16,14 +16,20 @@ const userProtect = asyncHandler(async (req, res, next) => {
 
       // verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log(decoded)
 
       // get user from token
-      req.user = await prisma.user.findUnique({
+      const user = await prisma.user.findUnique({
         where: {
+          name: decoded.name,
           email: decoded.email,
         },
       });
+      req.user = user;
+
+      if (!user) {
+        res.status(401);
+        throw new Error("Not authorized, user access required");
+      }
 
       next();
     } catch (error) {
