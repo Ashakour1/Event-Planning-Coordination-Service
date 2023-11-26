@@ -11,7 +11,7 @@ Welcome to our Event Planning and Coordination Service! Whether you're organizin
 
 ## BASE URL
 
-- [Event-planning-Api]()
+- [Event-planning-Api](https://event-planning.onrender.com/)
 
 ## User Register
 
