@@ -22,7 +22,7 @@ App.use("/api/admins", AdminRoutes);
 App.use("/api/users", UserRoutes);
 App.use("/api/events", eventRoutes);
 App.use("/api/vendors", vendorRoutes);
-App.use("/api/invitation", invitation);
+App.use("/api/invitations", invitation);
 App.use("/api/applications", vendorApp);
 
 App.use(errorHandler);
